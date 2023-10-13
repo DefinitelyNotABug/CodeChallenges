@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CodeChallenge.Models;
-using Microsoft.Extensions.Logging;
+﻿using CodeChallenge.Models;
 using CodeChallenge.Repositories;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace CodeChallenge.Services
 {

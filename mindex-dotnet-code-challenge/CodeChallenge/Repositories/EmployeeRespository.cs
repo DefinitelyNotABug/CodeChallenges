@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CodeChallenge.Data;
 using CodeChallenge.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using CodeChallenge.Data;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CodeChallenge.Repositories
 {
