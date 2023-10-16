@@ -1,5 +1,6 @@
 ﻿using CodeChallenge.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace CodeChallenge.Data
 {
@@ -11,5 +12,6 @@ namespace CodeChallenge.Data
         }
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Compensation> Compensations { get; set; }
     }
 }
