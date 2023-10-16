@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.IO;
-using Newtonsoft.Json;
 
 namespace CodeCodeChallenge.Tests.Integration.Helpers
 {
@@ -8,9 +7,9 @@ namespace CodeCodeChallenge.Tests.Integration.Helpers
     {
         private JsonSerializer serializer = JsonSerializer.CreateDefault();
 
-        public String ToJson<T>(T obj)
+        public string ToJson<T>(T obj)
         {
-            String json = null;
+            string json = null;
 
             if (obj != null)
             {

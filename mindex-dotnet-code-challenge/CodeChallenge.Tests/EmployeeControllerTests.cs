@@ -1,14 +1,11 @@
 
+using CodeChallenge.Models;
+using CodeCodeChallenge.Tests.Integration.Extensions;
+using CodeCodeChallenge.Tests.Integration.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-
-using CodeChallenge.Models;
-
-using CodeCodeChallenge.Tests.Integration.Extensions;
-using CodeCodeChallenge.Tests.Integration.Helpers;
-
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CodeCodeChallenge.Tests.Integration
 {
@@ -128,6 +125,37 @@ namespace CodeCodeChallenge.Tests.Integration
             var postRequestTask = _httpClient.PutAsync($"api/employee/{employee.EmployeeId}",
                new StringContent(requestContent, Encoding.UTF8, "application/json"));
             var response = postRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetReportingStructureById_Returns_Ok()
+        {
+            // Arrange
+            var employeeId = "16a596ae-edd3-4847-99fe-c4518e82c86f"; // John
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/employee/reports/{employeeId}");
+            var response = getRequestTask.Result;
+            var reportingStructure = response.DeserializeContent<ReportingStructure>();
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual(4, reportingStructure.NumberOfReports);
+            Assert.AreEqual(2, reportingStructure.Employee.DirectReports.Count);
+        }
+
+        [TestMethod]
+        public void GetReportingStructureById_Returns_NotFound()
+        {
+            // Arrange
+            var employeeId = "invalidEmployeeId";
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/employee/reports/{employeeId}");
+            var response = getRequestTask.Result;
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);

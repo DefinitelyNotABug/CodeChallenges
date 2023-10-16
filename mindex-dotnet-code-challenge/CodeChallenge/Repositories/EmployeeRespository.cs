@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CodeChallenge.Data;
 using CodeChallenge.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using CodeChallenge.Data;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CodeChallenge.Repositories
 {
@@ -30,6 +28,11 @@ namespace CodeChallenge.Repositories
         public Employee GetById(string id)
         {
             return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+        }
+
+        public async Task LoadDirectReportsAsync(Employee employee)
+        {
+            await _employeeContext.Entry(employee).Collection(e => e.DirectReports).LoadAsync().ConfigureAwait(false);
         }
 
         public Task SaveAsync()

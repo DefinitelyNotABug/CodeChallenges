@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CodeChallenge.Models;
+using CodeChallenge.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CodeChallenge.Services;
-using CodeChallenge.Models;
+using System.Threading.Tasks;
 
 namespace CodeChallenge.Controllers
 {
@@ -25,7 +22,7 @@ namespace CodeChallenge.Controllers
         [HttpPost]
         public IActionResult CreateEmployee([FromBody] Employee employee)
         {
-            _logger.LogDebug($"Received employee create request for '{employee.FirstName} {employee.LastName}'");
+            _logger.LogDebug("Received employee create request for {employeeFullName}", $"{employee.FirstName} {employee.LastName}");
 
             _employeeService.Create(employee);
 
@@ -33,9 +30,9 @@ namespace CodeChallenge.Controllers
         }
 
         [HttpGet("{id}", Name = "getEmployeeById")]
-        public IActionResult GetEmployeeById(String id)
+        public IActionResult GetEmployeeById(string id)
         {
-            _logger.LogDebug($"Received employee get request for '{id}'");
+            _logger.LogDebug($"Received employee get request for employee with id: {id}", id);
 
             var employee = _employeeService.GetById(id);
 
@@ -46,9 +43,9 @@ namespace CodeChallenge.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult ReplaceEmployee(String id, [FromBody]Employee newEmployee)
+        public IActionResult ReplaceEmployee(string id, [FromBody]Employee newEmployee)
         {
-            _logger.LogDebug($"Recieved employee update request for '{id}'");
+            _logger.LogDebug("Recieved employee update request for employee with id: {id}", id);
 
             var existingEmployee = _employeeService.GetById(id);
             if (existingEmployee == null)
@@ -57,6 +54,19 @@ namespace CodeChallenge.Controllers
             _employeeService.Replace(existingEmployee, newEmployee);
 
             return Ok(newEmployee);
+        }
+
+        [HttpGet("reports/{id}", Name = "getReportingStructureById")]
+        public async Task<IActionResult> GetReportingStructureById(string id)
+        {
+            _logger.LogDebug("Received employee reporting structure get request for employee with id: {id}", id);
+
+            var reportingStructure = await _employeeService.GetReportingStructureByIdAsync(id).ConfigureAwait(false);
+
+            if (reportingStructure == null)
+                return NotFound();
+
+            return Ok(reportingStructure);
         }
     }
 }

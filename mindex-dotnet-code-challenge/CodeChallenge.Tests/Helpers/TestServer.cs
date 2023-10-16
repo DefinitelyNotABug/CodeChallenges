@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace CodeCodeChallenge.Tests.Integration.Helpers
 {

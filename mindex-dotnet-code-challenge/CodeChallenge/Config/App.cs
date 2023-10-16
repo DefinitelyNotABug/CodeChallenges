@@ -1,13 +1,11 @@
-﻿using System;
-
-using CodeChallenge.Data;
+﻿using CodeChallenge.Data;
 using CodeChallenge.Repositories;
 using CodeChallenge.Services;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CodeChallenge.Config
 {
@@ -41,9 +39,11 @@ namespace CodeChallenge.Config
 
         private void AddServices(IServiceCollection services)
         {
-
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IEmployeeRepository, EmployeeRespository>();
+
+            services.AddScoped<ICompensationRepository, CompensationRepository>();
+            services.AddScoped<ICompensationService, CompensationService>();
 
             services.AddControllers();
         }
