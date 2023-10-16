@@ -1,7 +1,7 @@
 ﻿using CodeChallenge.Models;
 using CodeChallenge.Repositories;
 using Microsoft.Extensions.Logging;
-using System;
+using System.Threading.Tasks;
 
 namespace CodeChallenge.Services
 {
@@ -29,7 +29,7 @@ namespace CodeChallenge.Services
 
         public Employee GetById(string id)
         {
-            if(!String.IsNullOrEmpty(id))
+            if(!string.IsNullOrEmpty(id))
             {
                 return _employeeRepository.GetById(id);
             }
@@ -55,6 +55,43 @@ namespace CodeChallenge.Services
             }
 
             return newEmployee;
+        }
+
+        public async Task<ReportingStructure> GetReportingStructureByIdAsync(string id)
+        {
+            Employee employee = null;
+            
+            // Perform sanity checks
+            if (!string.IsNullOrEmpty(id))
+            {
+                employee = _employeeRepository.GetById(id);
+            }
+            if (employee == null)
+            {
+                _logger.LogWarning("No employee found with id: {id}", id);
+                return null;
+            }
+
+            return new ReportingStructure()
+            {
+                Employee = employee,
+                NumberOfReports = await CountReportsAsync(employee).ConfigureAwait(false),
+            };
+        }
+
+        public async Task<int> CountReportsAsync(Employee employee)
+        {
+            // Ensure any direct reports are loaded
+            await _employeeRepository.LoadDirectReportsAsync(employee).ConfigureAwait(false);
+
+            // Start with count of this employee's direct reports, then recursively count through the tree
+            var totalReports = employee.DirectReports.Count;
+            foreach (var directReport in employee.DirectReports)
+            {
+                totalReports += await CountReportsAsync(directReport).ConfigureAwait(false);
+            }
+
+            return totalReports;
         }
     }
 }

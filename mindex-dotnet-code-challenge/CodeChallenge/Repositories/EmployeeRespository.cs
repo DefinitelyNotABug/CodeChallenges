@@ -30,6 +30,11 @@ namespace CodeChallenge.Repositories
             return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
         }
 
+        public async Task LoadDirectReportsAsync(Employee employee)
+        {
+            await _employeeContext.Entry(employee).Collection(e => e.DirectReports).LoadAsync().ConfigureAwait(false);
+        }
+
         public Task SaveAsync()
         {
             return _employeeContext.SaveChangesAsync();
